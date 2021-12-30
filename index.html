@@ -97,6 +97,20 @@
 				<h1 class="lead">AWESOME, CUSTOMIZABLE, FREE</h1>
 				<p class="tagline">PROGRESSUS: free business bootstrap template by <a href="http://www.gettemplate.com/?utm_source=progressus&amp;utm_medium=template&amp;utm_campaign=progressus">GetTemplate</a></p>
 				<p><a class="btn btn-default btn-lg" role="button" onclick="hello()">GET WEB PERSONALISATION DEMO</a>
+					<form action="" method="post">
+<input type="button" value="ORDER NOW" onclick="hello()">
+<script>
+  function hello(){
+    console.log("event pushed");
+    clevertap.event.push("test Product Viewed", {
+  "Product name":"Casio Chronograph Watch",
+  "Category":"Mens Accessories",
+  "Price":59.99,
+});
+  }
+  
+</script>
+</form>
 			</div>
 		</div>
 	</header>
