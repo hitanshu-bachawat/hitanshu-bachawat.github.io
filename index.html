@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<script type="text/javascript">
+		var clevertap = {event:[], profile:[], account:[], onUserLogin:[], notifications:[], privacy:[]};
+	// replace with the CLEVERTAP_ACCOUNT_ID with the actual ACCOUNT ID value from your Dashboard -> Settings page
+   clevertap.account.push({"id": "46W-W4W-8R6Z"});
+   clevertap.privacy.push({optOut: false}); //set the flag to true, if the user of the device opts out of sharing their data
+   clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agrees to share their IP data
+	(function () {
+			var wzrk = document.createElement('script');
+			wzrk.type = 'text/javascript';
+			wzrk.async = true;
+			wzrk.src = "a.js";
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(wzrk, s);
+	 })();
+   </script>
+   <script>
+	function hello(){
+	  console.log("event pushed");
+	  clevertap.event.push("test Product Viewed", {
+	"Product name":"Casio Chronograph Watch",
+	"Category":"Mens Accessories",
+	"Price":59.99,
+  });
+	}
+	
+  </script>
 	<meta charset="utf-8">
 	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
@@ -18,11 +44,7 @@
 	<link rel="stylesheet" href="assets/css/bootstrap-theme.css" media="screen" >
 	<link rel="stylesheet" href="assets/css/main.css">
 
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="assets/js/html5shiv.js"></script>
-	<script src="assets/js/respond.min.js"></script>
-	<![endif]-->
+	
 </head>
 
 <body class="home">
@@ -55,11 +77,11 @@
 
 	<!-- Header -->
 	<header id="head">
-		<div class="container">
+		<div id = "personaliztion" class="container" style="height: 400px;">
 			<div class="row">
 				<h1 class="lead">AWESOME, CUSTOMIZABLE, FREE</h1>
 				<p class="tagline">PROGRESSUS: free business bootstrap template by <a href="http://www.gettemplate.com/?utm_source=progressus&amp;utm_medium=template&amp;utm_campaign=progressus">GetTemplate</a></p>
-				<p><a class="btn btn-default btn-lg" role="button">MORE INFO</a> <a class="btn btn-action btn-lg" role="button">DOWNLOAD NOW</a></p>
+				<p><a class="btn btn-default btn-lg" role="button" onclick="hello()">GET WEB PERSONALISATION DEMO</a>
 			</div>
 		</div>
 	</header>
