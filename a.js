@@ -1,7 +1,7 @@
 function __wizrocket() {
 
 
- var targetDomain = 'wzrkt.com';
+ var targetDomain = 'sk1.wzrkt.com';
   // var targetDomain = 'localhost:8081'; //ALWAYS comment this line before deploying
 
   var wz_pr = "https:";
