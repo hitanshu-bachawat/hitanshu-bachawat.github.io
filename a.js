@@ -2856,7 +2856,7 @@ function __wizrocket() {
       var html;
       //direct html
       if (targetingMsgJson['msgContent']['type'] == 1) {
-        html = targetingMsgJson['msgContent']['html'];
+        html = targetingMsgJson['display']['custom-html'];
         html = html.replace('##campaignId##', campaignId);
       } else {
         var css = '' +
@@ -2897,10 +2897,10 @@ function __wizrocket() {
             "</div></div>";
         html = css + title + body;
       }
-               var iframe2 = document.createElement('iframe');  
-            msgDiv.appendChild(iframe2);
-            var ifrm2 = (iframe2.contentWindow) ? iframe2.contentWindow : (iframe2.contentDocument.document) ? iframe2.contentDocument.document : iframe2.contentDocument;
-            var doc2 = ifrm2.document;
+             //  var iframe2 = document.createElement('iframe');  
+            //msgDiv.appendChild(iframe2);
+            //var ifrm2 = (iframe2.contentWindow) ? iframe2.contentWindow : (iframe2.contentDocument.document) ? iframe2.contentDocument.document : iframe2.contentDocument;
+            //var doc2 = ifrm2.document;
 
             //set the style of iframe as obtained from response
             iframe.setAttribute('style', "width: 100%;height: 100%;left:0;top:0; border: none");
@@ -2908,13 +2908,13 @@ function __wizrocket() {
            
 
 
-            doc2.open();
-            doc2.write(html);
-            doc2.close();
+           // doc2.open();
+            //doc2.write(html);
+            //doc2.close();
      // iframe.setAttribute('style', 'z-index: 2147483647; display:block; height: 100% !important; width: 100% !important;min-height:80px !important;border:0px !important; border-color:none !important;');
      // iframe.setAttribute('style', 'z-index: 2147483647; display:block; width: 100% !important; border:0px !important; border-color:none !important;');
-     iframe.setAttribute('style', 'width: 100%;height: 100%;left:0;top:0');
-     // msgDiv.appendChild(iframe2);
+     //iframe.setAttribute('style', 'width: 100%;height: 100%;left:0;top:0');
+     msgDiv.appendChild(iframe);
       var ifrm = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
       var doc = ifrm.document;
 
@@ -2922,8 +2922,8 @@ function __wizrocket() {
       doc.write(html);
       doc.close();
 
-     // var contentDiv = document.getElementById("wiz-iframe-intent").contentDocument.getElementById('contentDiv');
-    //  setupClickUrl(onClick, targetingMsgJson, contentDiv, 'personaliztion', legacy);
+     var contentDiv = document.getElementById("wiz-iframe-intent").contentDocument.getElementById('contentDiv');
+     setupClickUrl(onClick, targetingMsgJson, contentDiv, 'personaliztion', legacy);
 
 
     };
