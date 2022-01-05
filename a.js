@@ -2856,7 +2856,7 @@ function __wizrocket() {
       var html;
       //direct html
       if (targetingMsgJson['msgContent']['type'] == 1) {
-        html = targetingMsgJson['display']['custom-html'];
+        html = targetingMsgJson['msgContent']['html'];
         html = html.replace('##campaignId##', campaignId);
       } else {
         var css = '' +
