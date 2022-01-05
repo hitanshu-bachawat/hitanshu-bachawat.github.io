@@ -2838,7 +2838,7 @@ function __wizrocket() {
       var msgDiv = person;
       msgDiv.innerHTML="";
       if (typeof targetingMsgJson['display']['proto'] == STRING_CONSTANTS.UNDEFINED) {
-        legacy = true;
+     //   legacy = true;
         //msgDiv.setAttribute('style', 'display:block;overflow:hidden;top:55% !important;left:50% !important;position:fixed;z-index:2147483647;width:600px !important;height:600px !important;margin:-300px 0 0 -300px !important;');
       } else {
        //msgDiv.setAttribute('style', 'width: 100%;height: 100%;left:0;top:0');
@@ -2908,8 +2908,8 @@ function __wizrocket() {
       doc.write(html);
       doc.close();
 
-      var contentDiv = document.getElementById("wiz-iframe-intent").contentDocument.getElementById('contentDiv');
-      setupClickUrl(onClick, targetingMsgJson, contentDiv, 'personaliztion', legacy);
+     // var contentDiv = document.getElementById("wiz-iframe-intent").contentDocument.getElementById('contentDiv');
+    //  setupClickUrl(onClick, targetingMsgJson, contentDiv, 'personaliztion', legacy);
 
 
     };
