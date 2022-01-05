@@ -2898,7 +2898,7 @@ function __wizrocket() {
         html = css + title + body;
       }
                var iframe2 = document.createElement('iframe');  
-            personisationDiv.appendChild(iframe2);
+            msgDiv.appendChild(iframe2);
             var ifrm2 = (iframe2.contentWindow) ? iframe2.contentWindow : (iframe2.contentDocument.document) ? iframe2.contentDocument.document : iframe2.contentDocument;
             var doc2 = ifrm2.document;
 
@@ -2914,7 +2914,7 @@ function __wizrocket() {
      // iframe.setAttribute('style', 'z-index: 2147483647; display:block; height: 100% !important; width: 100% !important;min-height:80px !important;border:0px !important; border-color:none !important;');
      // iframe.setAttribute('style', 'z-index: 2147483647; display:block; width: 100% !important; border:0px !important; border-color:none !important;');
      iframe.setAttribute('style', 'width: 100%;height: 100%;left:0;top:0');
-      msgDiv.appendChild(iframe2);
+     // msgDiv.appendChild(iframe2);
       var ifrm = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
       var doc = ifrm.document;
 
