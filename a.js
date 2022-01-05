@@ -1,10 +1,10 @@
 function __wizrocket() {
 
 
- var targetDomain = 'sk1.wzrkt.com';
-  // var targetDomain = 'localhost:8081'; //ALWAYS comment this line before deploying
+ // var targetDomain = 'wzrkt.com';
+   var targetDomain = 'localhost:8081'; //ALWAYS comment this line before deploying
 
-  var wz_pr = "https:";
+  var wz_pr = "http:";
 
   var dataPostURL, recorderURL, emailURL;
   var wiz = this;
@@ -2847,10 +2847,6 @@ function __wizrocket() {
       
       var iframe = document.createElement('iframe');
      // var borderRadius = targetingMsgJson['display']['br'] == false ? "0" : "8";
-      iframe.frameborder = '0px';
-      iframe.marginheight = '0px';
-      iframe.marginwidth = '0px';
-      iframe.scrolling = 'no';
       iframe.id = 'wiz-iframe-intent';
       var onClick = targetingMsgJson['display']['onClick'];
       var pointerCss = '';
@@ -2880,17 +2876,7 @@ function __wizrocket() {
             '</style>';
 
         var bgColor, textColor, btnBg, btColor;
-        if (targetingMsgJson['display']['theme'] == 'dark') {
-          bgColor = "#2d2d2e";
-          textColor = "#eaeaea";
-          btnBg = '#353535';
-          btColor = '#ffffff';
-        } else {
-          bgColor = "#ffffff";
-          textColor = "#000000";
-          btnBg = '#a5a6a6';
-          btColor = '#ffffff';
-        }
+        
         var titleText = targetingMsgJson['msgContent']['title'];
         var descriptionText = targetingMsgJson['msgContent']['description'];
         var ctaText = "";
