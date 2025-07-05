@@ -317,11 +317,12 @@
         }
 
         .signature-section {
-            margin-top: 60px;
+            margin-top: 80px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            min-height: 120px;
+            min-height: 140px;
+            page-break-inside: avoid;
         }
 
         .signature-left {
@@ -335,7 +336,7 @@
 
         .signature-line {
             border-top: 2px solid #333;
-            margin: 60px 0 15px 0;
+            margin: 80px 0 15px 0;
             width: 250px;
         }
 
@@ -523,6 +524,48 @@
             margin-bottom: 10px;
         }
 
+        /* Doctor info display */
+        .doctor-info-display {
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0f7fa 100%);
+            border: 2px solid #2c5aa0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(44, 90, 160, 0.1);
+        }
+
+        .doctor-info-display h4 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .doctor-info-display p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .doctor-info-display .doctor-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c5aa0;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .doctor-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .doctor-info-grid p {
+            margin-bottom: 5px;
+        }
+
         /* Print Styles - CONTENT PADDING FOR PROPER MARGINS */
         @media print {
             @page {
@@ -637,13 +680,13 @@
             }
             
             .signature-section {
-                margin-top: 40px !important;
-                min-height: 80px !important;
+                margin-top: 60px !important;
+                min-height: 120px !important;
                 page-break-inside: avoid !important;
             }
             
             .signature-line {
-                margin: 40px 0 10px 0 !important;
+                margin: 60px 0 10px 0 !important;
                 width: 180px !important;
                 border-top: 2px solid #333 !important;
             }
@@ -714,13 +757,41 @@
             background: #1e3c72;
             transform: scale(1.1);
         }
+
+        /* Form field highlighting for better UX */
+        .form-group input:valid,
+        .form-group select:valid,
+        .form-group textarea:valid {
+            border-color: #28a745;
+        }
+
+        .form-group input:invalid,
+        .form-group select:invalid,
+        .form-group textarea:invalid {
+            border-color: #dc3545;
+        }
+
+        /* Improved conditional field styling */
+        .conditional-field {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .conditional-field h4 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Medical Certificate & Invoice Generator</h1>
-            <p>Professional Medical Documentation Tool - Version 87.0</p>
+            <p>Professional Medical Documentation Tool - Version 90.0</p>
         </div>
 
         <div class="main-content">
@@ -757,40 +828,24 @@
                     </div>
                 </div>
 
-                <h3>Doctor Information</h3>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label>Doctor Name:</label>
-                            <input type="text" id="doctorName" value="Dr. Sutej Sunil Bachawat">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label>Qualifications:</label>
-                            <input type="text" id="qualifications" value="MBBS, D.Ortho, DNB (Ortho)">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label>Registration Number:</label>
-                            <input type="text" id="regNumber" value="2016/07/1849">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label>Contact Number:</label>
-                            <input type="text" id="contactNumber" value="+91 93249 21343">
-                        </div>
-                    </div>
-                </div>
-
+                <h3>Select Doctor</h3>
                 <div class="form-group">
-                    <label>Email ID:</label>
-                    <input type="email" id="emailId" value="sutejbachawat@gmail.com">
+                    <label>Doctor:</label>
+                    <select id="doctorSelect" onchange="updateDoctorInfo()">
+                        <option value="dr_sutej">Dr. Sutej Sunil Bachawat</option>
+                        <option value="dr_aayushi">Dr. Aayushi Bachawat</option>
+                    </select>
+                </div>
+
+                <div class="doctor-info-display" id="doctorInfoDisplay">
+                    <h4>Selected Doctor Information</h4>
+                    <p class="doctor-name" id="displayDoctorName">Dr. Sutej Sunil Bachawat</p>
+                    <div class="doctor-info-grid">
+                        <p><strong>Qualifications:</strong><br><span id="displayQualifications">MBBS, D.Ortho, DNB (Ortho)</span></p>
+                        <p><strong>Registration No:</strong><br><span id="displayRegNumber">2016/07/1849</span></p>
+                        <p><strong>Contact:</strong><br><span id="displayContact">+91 93249 21343</span></p>
+                        <p><strong>Email:</strong><br><span id="displayEmail">sutejbachawat@gmail.com</span></p>
+                    </div>
                 </div>
 
                 <h3>Document Details</h3>
@@ -798,13 +853,13 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Document Date:</label>
-                            <input type="date" id="documentDate" value="2025-07-05">
+                            <input type="date" id="documentDate" value="2025-07-05" required>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label>Document Number:</label>
-                            <input type="text" id="documentNumber" value="0001">
+                            <input type="text" id="documentNumber" value="0001" required>
                         </div>
                     </div>
                 </div>
@@ -814,13 +869,13 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Patient Name:</label>
-                            <input type="text" id="patientName" value="Mrs. Ranjan Prakashchandra Bhatt">
+                            <input type="text" id="patientName" value="Mrs. Ranjan Prakashchandra Bhatt" required>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label>Age:</label>
-                            <input type="number" id="age" value="78">
+                            <input type="number" id="age" value="78" min="1" max="120" required>
                         </div>
                     </div>
                 </div>
@@ -829,7 +884,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Gender:</label>
-                            <select id="gender">
+                            <select id="gender" required>
                                 <option value="female">Female</option>
                                 <option value="male">Male</option>
                             </select>
@@ -838,7 +893,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Address:</label>
-                            <textarea id="address">1101, Vardhaman Galaxy, 28/30, Navi Wadi, Dadiseth Agyari Lane, Chirabazar, Mumbai- 400 002</textarea>
+                            <textarea id="address" required>1101, Vardhaman Galaxy, 28/30, Navi Wadi, Dadiseth Agyari Lane, Chirabazar, Mumbai- 400 002</textarea>
                         </div>
                     </div>
                 </div>
@@ -907,7 +962,7 @@ Physiotherapy</textarea>
 
                     <div class="form-group" id="disabilityPercentage" style="display: none;">
                         <label>Disability Percentage:</label>
-                        <input type="number" id="disabilityPercent" min="0" max="100">
+                        <input type="number" id="disabilityPercent" min="0" max="100" placeholder="Enter percentage">
                     </div>
                 </div>
 
@@ -930,7 +985,7 @@ Physiotherapy</textarea>
                         <div class="col">
                             <div class="form-group">
                                 <label>Medical Condition:</label>
-                                <input type="text" id="medicalCondition" value="Pain in foot">
+                                <input type="text" id="medicalCondition" value="Pain in foot" required>
                             </div>
                         </div>
                     </div>
@@ -939,13 +994,13 @@ Physiotherapy</textarea>
                         <div class="col">
                             <div class="form-group">
                                 <label>Treatment From Date:</label>
-                                <input type="date" id="treatmentFromDate" value="2025-01-20">
+                                <input type="date" id="treatmentFromDate" value="2025-01-20" required>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label>Treatment To Date:</label>
-                                <input type="date" id="treatmentToDate" value="2025-02-09">
+                                <input type="date" id="treatmentToDate" value="2025-02-09" required>
                             </div>
                         </div>
                     </div>
@@ -954,13 +1009,13 @@ Physiotherapy</textarea>
                         <div class="col">
                             <div class="form-group">
                                 <label>Rest Period (days):</label>
-                                <input type="number" id="restPeriodDays" value="30" min="1">
+                                <input type="number" id="restPeriodDays" value="30" min="1" required>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label>Rest Period From Date:</label>
-                                <input type="date" id="restPeriodFromDate" value="2025-01-20">
+                                <input type="date" id="restPeriodFromDate" value="2025-01-20" required>
                             </div>
                         </div>
                     </div>
@@ -973,9 +1028,22 @@ Physiotherapy</textarea>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label>Resume From Date (if fit):</label>
-                        <input type="date" id="resumeFromDate" value="">
+                    <div class="conditional-field" id="fitStatusFields">
+                        <h4>Fitness Status Details</h4>
+                        <div class="form-group">
+                            <label>Resume From Date (if fit):</label>
+                            <input type="date" id="resumeFromDate" value="">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Additional Treatment Days (if unfit):</label>
+                            <input type="number" id="additionalTreatmentDays" value="" min="1" placeholder="Enter number of days">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Doctor's Advice (if unfit):</label>
+                            <textarea id="doctorAdvice" placeholder="e.g., complete bed rest, physiotherapy, follow-up consultation"></textarea>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -984,18 +1052,8 @@ Physiotherapy</textarea>
                     </div>
 
                     <div class="form-group">
-                        <label>Additional Treatment Days (if unfit):</label>
-                        <input type="number" id="additionalTreatmentDays" value="" min="1">
-                    </div>
-
-                    <div class="form-group">
                         <label>Hospital/Clinic Name (optional):</label>
-                        <input type="text" id="leaveHospitalName" value="">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Doctor's Advice:</label>
-                        <textarea id="doctorAdvice" placeholder="e.g., fit to resume duty"></textarea>
+                        <input type="text" id="leaveHospitalName" value="" placeholder="Name of hospital/clinic where treatment was given">
                     </div>
                 </div>
 
@@ -1076,9 +1134,47 @@ Physiotherapy</textarea>
     <script>
         let invoiceItemCounter = 0;
 
+        // Doctor information database
+        const doctorDatabase = {
+            'dr_sutej': {
+                name: 'Dr. Sutej Sunil Bachawat',
+                qualifications: 'MBBS, D.Ortho, DNB (Ortho)',
+                regNumber: '2016/07/1849',
+                contactNumber: '+91 93249 21343',
+                emailId: 'sutejbachawat@gmail.com'
+            },
+            'dr_aayushi': {
+                name: 'Dr. Aayushi Bachawat',
+                qualifications: 'MBBS, DNB (Paediatrics), Fellowship (Neonatology)',
+                regNumber: '2018/05/2511',
+                contactNumber: '+919975783130',
+                emailId: 'dotimoti@gmail.com'
+            }
+        };
+
+        // Get selected doctor information
+        function getSelectedDoctorInfo() {
+            const selectedDoctorId = document.getElementById('doctorSelect').value;
+            return doctorDatabase[selectedDoctorId];
+        }
+
+        // Update doctor information display
+        function updateDoctorInfo() {
+            const doctorInfo = getSelectedDoctorInfo();
+            
+            document.getElementById('displayDoctorName').textContent = doctorInfo.name;
+            document.getElementById('displayQualifications').textContent = doctorInfo.qualifications;
+            document.getElementById('displayRegNumber').textContent = doctorInfo.regNumber;
+            document.getElementById('displayContact').textContent = doctorInfo.contactNumber;
+            document.getElementById('displayEmail').textContent = doctorInfo.emailId;
+            
+            updatePreview();
+        }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Page loaded, initializing application...');
+            updateDoctorInfo();
             updatePreview();
             
             // Add initial invoice item
@@ -1136,7 +1232,36 @@ Physiotherapy</textarea>
                 }
                 updatePreview();
             });
+
+            // Fitness status change for medical leave
+            document.getElementById('fitnessStatus').addEventListener('change', function() {
+                updateConditionalFields();
+                updatePreview();
+            });
         });
+
+        function updateConditionalFields() {
+            const fitnessStatus = document.getElementById('fitnessStatus').value;
+            const resumeFromDate = document.getElementById('resumeFromDate');
+            const additionalTreatmentDays = document.getElementById('additionalTreatmentDays');
+            const doctorAdvice = document.getElementById('doctorAdvice');
+            
+            if (fitnessStatus === 'fit') {
+                resumeFromDate.style.display = 'block';
+                resumeFromDate.parentElement.style.display = 'block';
+                additionalTreatmentDays.style.display = 'none';
+                additionalTreatmentDays.parentElement.style.display = 'none';
+                doctorAdvice.style.display = 'none';
+                doctorAdvice.parentElement.style.display = 'none';
+            } else {
+                resumeFromDate.style.display = 'none';
+                resumeFromDate.parentElement.style.display = 'none';
+                additionalTreatmentDays.style.display = 'block';
+                additionalTreatmentDays.parentElement.style.display = 'block';
+                doctorAdvice.style.display = 'block';
+                doctorAdvice.parentElement.style.display = 'block';
+            }
+        }
 
         function addInvoiceItem() {
             invoiceItemCounter++;
@@ -1199,13 +1324,16 @@ Physiotherapy</textarea>
             const templateType = activeTemplate.dataset.template;
             console.log('Template type:', templateType);
             
-            // Get form values with fallbacks
+            // Get selected doctor info
+            const doctorInfo = getSelectedDoctorInfo();
+            
+            // Get form values with proper fallbacks
             const data = {
-                doctorName: document.getElementById('doctorName')?.value || 'Dr. Sutej Sunil Bachawat',
-                qualifications: document.getElementById('qualifications')?.value || 'MBBS, D.Ortho, DNB (Ortho)',
-                regNumber: document.getElementById('regNumber')?.value || '2016/07/1849',
-                contactNumber: document.getElementById('contactNumber')?.value || '+91 93249 21343',
-                emailId: document.getElementById('emailId')?.value || 'sutejbachawat@gmail.com',
+                doctorName: doctorInfo.name,
+                qualifications: doctorInfo.qualifications,
+                regNumber: doctorInfo.regNumber,
+                contactNumber: doctorInfo.contactNumber,
+                emailId: doctorInfo.emailId,
                 documentDate: formatDate(document.getElementById('documentDate')?.value || '2025-07-05'),
                 documentNumber: document.getElementById('documentNumber')?.value || '0001',
                 patientName: document.getElementById('patientName')?.value || 'Mrs. Ranjan Prakashchandra Bhatt',
@@ -1315,32 +1443,32 @@ Physiotherapy</textarea>
             
             // Basic patient information - combine title and name in one line
             const patientTitle = data.patientTitle ? `${data.patientTitle} ` : '';
-            contentSections.push(`<p>This is to Certify that ${patientTitle}<span class="highlight">${data.patientName}</span> is/was having <span class="highlight">${data.medicalCondition}</span> and is/was under my treatment from <span class="highlight">${data.treatmentFromDate}</span> to <span class="highlight">${data.treatmentToDate}</span> (both days inclusive)</p>`);
+            contentSections.push(`<p>This is to Certify that ${patientTitle}<span class="highlight">${data.patientName}</span> is/was having <span class="highlight">${data.medicalCondition}</span> and is/was under my treatment from <span class="highlight">${data.treatmentFromDate}</span> to <span class="highlight">${data.treatmentToDate}</span> (both days inclusive).</p>`);
             
             // Medical condition details - only include "at hospital" if hospital name exists
             const hospitalText = data.leaveHospitalName ? ` at <span class="highlight">${data.leaveHospitalName}</span>` : '';
-            contentSections.push(`<p>Patient is/was suffering from/operated for <span class="highlight">${data.medicalCondition}</span>${hospitalText}</p>`);
+            contentSections.push(`<p>Patient is/was suffering from/operated for <span class="highlight">${data.medicalCondition}</span>${hospitalText}.</p>`);
             
             // Rest period advice
-            contentSections.push(`<p>This patient is advised complete rest & treatment for about <span class="highlight">${data.restPeriodDays}</span> days from <span class="highlight">${data.restPeriodFromDate}</span></p>`);
+            contentSections.push(`<p>This patient is advised complete rest & treatment for about <span class="highlight">${data.restPeriodDays}</span> days from <span class="highlight">${data.restPeriodFromDate}</span>.</p>`);
             
             // Fitness status section - only if patient is fit and resume date is provided
             if (data.fitnessStatus === 'fit' && data.resumeFromDate) {
-                contentSections.push(`<p>This patient is/was better & is/was in fit state of health to resume duties/attend school from <span class="highlight">${data.resumeFromDate}</span></p>`);
+                contentSections.push(`<p>This patient is/was better & is/was in fit state of health to resume duties/attend school from <span class="highlight">${data.resumeFromDate}</span>.</p>`);
             }
             
             // Previous certificate section - only if date is provided
             if (data.previousCertDate) {
-                contentSections.push(`<p>In continuation of our previous Certificate, dated <span class="highlight">${data.previousCertDate}</span></p>`);
+                contentSections.push(`<p>In continuation of our previous Certificate, dated <span class="highlight">${data.previousCertDate}</span>.</p>`);
             }
             
             // Additional treatment section - only if patient is unfit
             if (data.fitnessStatus === 'unfit') {
                 const unfitPatientTitle = data.patientTitle ? `${data.patientTitle} ` : 'Shri/Smt./Master/Miss ';
-                const additionalDays = data.additionalTreatmentDays || '_____';
-                const advice = data.doctorAdvice || '_____________________';
+                const additionalDays = data.additionalTreatmentDays || '____';
+                const advice = data.doctorAdvice || 'complete rest & further treatment';
                 
-                contentSections.push(`<p>It is certified that ${unfitPatientTitle}<span class="highlight">${data.patientName}</span> is still not better & requires complete rest & further treatment for about <span class="highlight">${additionalDays}</span> days from to day. He/She is advised <span class="highlight">${advice}</span></p>`);
+                contentSections.push(`<p>It is certified that ${unfitPatientTitle}<span class="highlight">${data.patientName}</span> is still not better & requires complete rest & further treatment for about <span class="highlight">${additionalDays}</span> days from today. He/She is advised <span class="highlight">${advice}</span>.</p>`);
             }
             
             return `
@@ -1367,11 +1495,18 @@ Physiotherapy</textarea>
                     ${contentSections.join('')}
                 </div>
 
-                <div class="signature-section" style="margin-top: 80px;">
+                <div class="signature-section" style="margin-top: 100px; min-height: 160px;">
+                    <div class="signature-left">
+                        <div style="margin-top: 60px;">
+                            <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">Date: ${data.documentDate}</div>
+                            <div style="font-size: 14px; font-weight: bold;">Place: Mumbai</div>
+                        </div>
+                    </div>
                     <div class="signature-right" style="text-align: right;">
-                        <div style="border-top: 2px solid #333; width: 200px; margin-left: auto; margin-bottom: 10px;"></div>
+                        <div style="border-top: 2px solid #333; width: 250px; margin-left: auto; margin-bottom: 15px;"></div>
                         <div style="font-weight: bold; font-size: 16px;">${data.doctorName.toUpperCase()}</div>
                         <div style="font-size: 12px; color: #666; margin-top: 5px;">Reg. No: ${data.regNumber}</div>
+                        <div style="font-size: 12px; color: #666; margin-top: 2px;">Doctor's Signature</div>
                     </div>
                 </div>
             `;
@@ -1671,7 +1806,7 @@ Physiotherapy</textarea>
         }
 
         function showPrintSettings() {
-            alert(`📋 MEDICAL CERTIFICATE & INVOICE GENERATOR - VERSION 87.0:
+            alert(`📋 MEDICAL CERTIFICATE & INVOICE GENERATOR - VERSION 90.0:
 
 🔧 PRINT SETTINGS:
 ✅ Destination: "Save as PDF"
@@ -1682,15 +1817,21 @@ Physiotherapy</textarea>
 ✅ Headers/footers: OFF
 ✅ Background graphics: OFF
 
-✨ VERSION 87.0 - FURTHER GRAMMAR IMPROVEMENTS:
-• Fixed "and is/was under my treatment" construction
-• Made hospital name optional in medical condition line
-• Added hospital name field for leave certificate
+✨ VERSION 90.0 - MULTI-DOCTOR SUPPORT:
+• NEW: Added Dr. Aayushi Bachawat to the system
+• NEW: Enhanced doctor info display with grid layout
+• NEW: Support for multiple doctors in dropdown
+• IMPROVED: Better visual organization of doctor information
+• IMPROVED: Automatic switching between doctor profiles
+
+👨‍⚕️ AVAILABLE DOCTORS:
+• Dr. Sutej Sunil Bachawat - MBBS, D.Ortho, DNB (Ortho)
+• Dr. Aayushi Bachawat - MBBS, DNB (Paediatrics), Fellowship (Neonatology)
 
 🎯 ALL TEMPLATES:
 • Fitness Certificate: Insurance claims
 • Medical Certificate: General medical use
-• Mental Fitness Certificate: Legal capacity assessment (with gender-specific pronouns)
+• Mental Fitness Certificate: Legal capacity assessment
 • Medical Invoice: Professional billing with multiple items
 • Referral Letter: Hospital admission referrals
 • Medical Leave Certificate: To whomsoever it may concern
@@ -1699,21 +1840,28 @@ Physiotherapy</textarea>
 • Content padding ensures proper spacing
 • Never touches page edges
 • Professional appearance guaranteed
+• Signature areas have adequate space
 
 🖨️ PRINTING STEPS:
-1. Select desired template
-2. Fill in required information
-3. For invoices: Add multiple items as needed
-4. Click "Generate & Save PDF"
-5. Keep all print settings as default
-6. Save your professional document
+1. Select desired doctor from dropdown
+2. Select desired template
+3. Fill in patient and document information
+4. For invoices: Add multiple items as needed
+5. Click "Generate & Save PDF"
+6. Keep all print settings as default
+7. Save your professional document
 
-Version 87.0 now includes further grammar improvements and optional hospital field!`);
+Version 90.0 now supports multiple doctors with beautiful display formatting!`);
         }
 
         function clearForm() {
             if (confirm('Are you sure you want to clear all form data?')) {
                 document.querySelectorAll('input, select, textarea').forEach(input => {
+                    if (input.id === 'doctorSelect') {
+                        // Don't clear doctor selection
+                        return;
+                    }
+                    
                     if (input.type === 'checkbox') {
                         input.checked = false;
                     } else if (input.type === 'date') {
@@ -1742,12 +1890,18 @@ Version 87.0 now includes further grammar improvements and optional hospital fie
         }
 
         function showHelp() {
-            alert(`🏥 MEDICAL CERTIFICATE & INVOICE GENERATOR - VERSION 87.0
+            alert(`🏥 MEDICAL CERTIFICATE & INVOICE GENERATOR - VERSION 90.0
 
-📋 FURTHER GRAMMAR IMPROVEMENTS:
-• Fixed "and is/was under my treatment" construction
-• Made hospital name optional in leave certificate
-• Improved conditional content rendering
+📋 MULTI-DOCTOR SUPPORT IN VERSION 90.0:
+• NEW: Added Dr. Aayushi Bachawat to the system
+• NEW: Enhanced doctor info display with grid layout
+• NEW: Support for multiple doctors in dropdown
+• IMPROVED: Better visual organization of doctor information
+• IMPROVED: Automatic switching between doctor profiles
+
+👨‍⚕️ AVAILABLE DOCTORS:
+• Dr. Sutej Sunil Bachawat - MBBS, D.Ortho, DNB (Ortho)
+• Dr. Aayushi Bachawat - MBBS, DNB (Paediatrics), Fellowship (Neonatology)
 
 🎯 ALL DOCUMENT TYPES:
 • Fitness Certificate: Insurance claims and fitness declarations
@@ -1758,20 +1912,34 @@ Version 87.0 now includes further grammar improvements and optional hospital fie
 • Medical Leave Certificate: To whomsoever it may concern
 
 📐 SMART FEATURES:
-• Template-specific form fields
+• Multi-doctor selection system
+• Template-specific form fields with validation
 • Live preview functionality
 • Built-in margins for professional appearance
 • Single-page optimization
 • Gender-aware pronoun usage
+• Conditional field display
 
 🖊️ PROFESSIONAL FORMATTING:
 • Medical-grade typography and spacing
 • Proper signature areas with adequate space
 • Clean, legal-compliant document structure
 • Professional invoice table formatting
+• Enhanced signature section with date/place
+• Beautiful doctor information display
 
-VERSION 87.0 - Now with further grammar improvements and optional hospital field!`);
+🚀 HOW TO USE:
+1. Select your desired doctor from the dropdown
+2. Choose your document template
+3. Fill in patient and document details
+4. Preview updates in real-time
+5. Generate and save your professional document
+
+VERSION 90.0 - Now supporting multiple doctors with enhanced display formatting!`);
         }
+
+        // Initialize conditional fields on page load
+        updateConditionalFields();
     </script>
 </body>
 </html>
