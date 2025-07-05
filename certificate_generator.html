@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <title>Medical Certificate & Invoice Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3c72 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 80vh;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 40px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            overflow-y: auto;
+        }
+
+        .preview-section {
+            flex: 1;
+            padding: 20px;
+            background: white;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c5aa0;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-section h2 {
+            color: #2c5aa0;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+
+        .form-section h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #2c5aa0;
+            padding-bottom: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3c72 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 90, 160, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* Certificate Styles */
+        .certificate-preview {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 50px;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 800px;
+            min-height: 700px;
+            position: relative;
+            box-sizing: border-box;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .cert-letterhead {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            align-items: center;
+            border-bottom: 2px solid #2c5aa0;
+            padding-bottom: 25px;
+            margin-bottom: 40px;
+        }
+
+        .letterhead-left {
+            text-align: left;
+        }
+
+        .letterhead-center {
+            text-align: center;
+        }
+
+        .letterhead-right {
+            text-align: right;
+        }
+
+        .doctor-name-header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 8px;
+        }
+
+        .qualifications-header {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 0;
+        }
+
+        .contact-details {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .contact-details div {
+            margin-bottom: 5px;
+        }
+
+        .medical-symbol {
+            font-size: 64px;
+            color: #2c5aa0;
+            margin-left: -20px;
+        }
+
+        .certificate-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5aa0;
+            margin: 40px 0 30px 0;
+            text-decoration: underline;
+        }
+
+        .certificate-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .certificate-details span {
+            color: #2c5aa0;
+        }
+
+        .cert-content {
+            line-height: 1.8;
+            font-size: 16px;
+            text-align: justify;
+            margin-bottom: 50px;
+        }
+
+        .cert-content p {
+            margin-bottom: 20px;
+            text-indent: 0;
+        }
+
+        .cert-content ul {
+            margin: 20px 0;
+            padding-left: 30px;
+            line-height: 1.8;
+        }
+
+        .cert-content ol {
+            margin: 20px 0;
+            padding-left: 30px;
+            line-height: 1.8;
+        }
+
+        .cert-content li {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .signature-section {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 120px;
+        }
+
+        .signature-left {
+            flex: 1;
+        }
+
+        .signature-right {
+            flex: 1;
+            text-align: right;
+        }
+
+        .signature-line {
+            border-top: 2px solid #333;
+            margin: 60px 0 15px 0;
+            width: 250px;
+        }
+
+        .signature-right .signature-line {
+            margin-left: auto;
+        }
+
+        .signature-text {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .signature-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .template-selector {
+            margin-bottom: 30px;
+        }
+
+        .template-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .template-option {
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            flex: 1;
+            min-width: 180px;
+            font-size: 14px;
+        }
+
+        .template-option:hover {
+            border-color: #2c5aa0;
+            background: #f8f9fa;
+        }
+
+        .template-option.active {
+            border-color: #2c5aa0;
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .preview-actions {
+            position: sticky;
+            top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .preview-actions h3 {
+            margin-bottom: 15px;
+            color: #2c5aa0;
+        }
+
+        .preview-actions .btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            flex: none;
+            min-width: auto;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* Additional fields that show/hide based on template */
+        .fitness-fields {
+            display: none;
+        }
+
+        .fitness-fields.active {
+            display: block;
+        }
+
+        .invoice-fields {
+            display: none;
+        }
+
+        .invoice-fields.active {
+            display: block;
+        }
+
+        /* Invoice-specific styles */
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        .invoice-table th,
+        .invoice-table td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .invoice-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .invoice-table .amount-col {
+            text-align: right;
+        }
+
+        .invoice-table .total-row {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+
+        .invoice-items {
+            margin-bottom: 30px;
+        }
+
+        .invoice-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+        }
+
+        .invoice-item h4 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .item-actions .btn {
+            padding: 8px 16px;
+            font-size: 12px;
+            min-width: auto;
+            flex: none;
+        }
+
+        .add-item-btn {
+            margin-bottom: 20px;
+        }
+
+        .patient-details {
+            margin-bottom: 30px;
+        }
+
+        .patient-details h4 {
+            color: #2c5aa0;
+            margin-bottom: 10px;
+        }
+
+        .patient-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .patient-diagnosis {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* Print Styles - CONTENT PADDING FOR PROPER MARGINS */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            
+            .header,
+            .form-section,
+            .preview-actions,
+            .floating-help {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .container {
+                background: white !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: none !important;
+            }
+            
+            .main-content {
+                display: block !important;
+                min-height: auto !important;
+            }
+            
+            .preview-section {
+                padding: 0 !important;
+                background: white !important;
+            }
+            
+            .certificate-preview {
+                border: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                padding: 60px 50px !important;
+                box-shadow: none !important;
+                max-width: none !important;
+                min-height: 100vh !important;
+                font-size: 14px !important;
+                line-height: 1.6 !important;
+            }
+            
+            .cert-letterhead {
+                grid-template-columns: 1fr 2fr 1fr !important;
+                gap: 20px !important;
+                padding-bottom: 20px !important;
+                margin-bottom: 25px !important;
+                border-bottom: 2px solid #333 !important;
+            }
+            
+            .doctor-name-header {
+                font-size: 20px !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .qualifications-header {
+                font-size: 14px !important;
+            }
+            
+            .contact-details {
+                font-size: 11px !important;
+                line-height: 1.5 !important;
+            }
+            
+            .contact-details div {
+                margin-bottom: 3px !important;
+            }
+            
+            .medical-symbol {
+                font-size: 48px !important;
+                margin-left: -15px !important;
+            }
+            
+            .certificate-title {
+                font-size: 18px !important;
+                margin: 25px 0 20px 0 !important;
+            }
+            
+            .certificate-details {
+                font-size: 13px !important;
+                margin-bottom: 25px !important;
+            }
+            
+            .cert-content {
+                font-size: 14px !important;
+                line-height: 1.7 !important;
+                margin-bottom: 30px !important;
+            }
+            
+            .cert-content p {
+                margin-bottom: 12px !important;
+            }
+            
+            .cert-content ul, .cert-content ol {
+                margin: 12px 0 !important;
+                padding-left: 25px !important;
+                line-height: 1.5 !important;
+            }
+            
+            .cert-content li {
+                margin-bottom: 8px !important;
+                font-size: 14px !important;
+            }
+            
+            .signature-section {
+                margin-top: 40px !important;
+                min-height: 80px !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .signature-line {
+                margin: 40px 0 10px 0 !important;
+                width: 180px !important;
+                border-top: 2px solid #333 !important;
+            }
+            
+            .signature-text {
+                font-size: 13px !important;
+                font-weight: bold !important;
+            }
+            
+            .signature-info {
+                font-size: 11px !important;
+                margin-top: 3px !important;
+            }
+
+            .invoice-table {
+                font-size: 12px !important;
+            }
+
+            .invoice-table th,
+            .invoice-table td {
+                padding: 8px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .form-section {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: auto;
+            }
+            
+            .template-options {
+                flex-direction: column;
+            }
+            
+            .template-option {
+                min-width: auto;
+            }
+        }
+
+        .floating-help {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c5aa0;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(44, 90, 160, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .floating-help:hover {
+            background: #1e3c72;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Medical Certificate & Invoice Generator</h1>
+            <p>Professional Medical Documentation Tool - Version 87.0</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>Document Information</h2>
+                
+                <div class="template-selector">
+                    <label>Select Template:</label>
+                    <div class="template-options">
+                        <div class="template-option active" data-template="fitness">
+                            <strong>Fitness Certificate</strong>
+                            <br><small>For insurance claims</small>
+                        </div>
+                        <div class="template-option" data-template="medical">
+                            <strong>Medical Certificate</strong>
+                            <br><small>General medical use</small>
+                        </div>
+                        <div class="template-option" data-template="mentalfitness">
+                            <strong>Mental Fitness Certificate</strong>
+                            <br><small>For legal capacity assessment</small>
+                        </div>
+                        <div class="template-option" data-template="invoice">
+                            <strong>Medical Invoice</strong>
+                            <br><small>Professional billing</small>
+                        </div>
+                        <div class="template-option" data-template="referral">
+                            <strong>Referral Letter</strong>
+                            <br><small>Hospital admission referral</small>
+                        </div>
+                        <div class="template-option" data-template="leave">
+                            <strong>Medical Leave Certificate</strong>
+                            <br><small>To whomsoever it may concern</small>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Doctor Information</h3>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Doctor Name:</label>
+                            <input type="text" id="doctorName" value="Dr. Sutej Sunil Bachawat">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Qualifications:</label>
+                            <input type="text" id="qualifications" value="MBBS, D.Ortho, DNB (Ortho)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Registration Number:</label>
+                            <input type="text" id="regNumber" value="2016/07/1849">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Contact Number:</label>
+                            <input type="text" id="contactNumber" value="+91 93249 21343">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email ID:</label>
+                    <input type="email" id="emailId" value="sutejbachawat@gmail.com">
+                </div>
+
+                <h3>Document Details</h3>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Document Date:</label>
+                            <input type="date" id="documentDate" value="2025-07-05">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Document Number:</label>
+                            <input type="text" id="documentNumber" value="0001">
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Patient Information</h3>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Patient Name:</label>
+                            <input type="text" id="patientName" value="Mrs. Ranjan Prakashchandra Bhatt">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Age:</label>
+                            <input type="number" id="age" value="78">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <select id="gender">
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Address:</label>
+                            <textarea id="address">1101, Vardhaman Galaxy, 28/30, Navi Wadi, Dadiseth Agyari Lane, Chirabazar, Mumbai- 400 002</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificate Fields -->
+                <div id="fitnessFields" class="fitness-fields">
+                    <h3>Medical Details</h3>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Accident Description:</label>
+                                <input type="text" id="accidentDescription" value="Fall">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Accident Date:</label>
+                                <input type="date" id="accidentDate" value="2025-05-06">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Injuries:</label>
+                        <textarea id="injuries">Fracture of left ring finger metacarpal head</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hospital/Clinic Name:</label>
+                        <input type="text" id="hospitalName" value="Conwest & Manjula S. Badani Jain Hospital">
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Treatment Start Date:</label>
+                                <input type="date" id="treatmentStartDate" value="2025-05-08">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Treatment End Date:</label>
+                                <input type="date" id="treatmentEndDate" value="2025-07-04">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Treatment Details:</label>
+                        <textarea id="treatmentDetails">Plaster cast for left hand
+Physiotherapy</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Examination Date:</label>
+                        <input type="date" id="examinationDate" value="2025-07-05">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Disability Status:</label>
+                        <select id="disabilityStatus">
+                            <option value="no">No residual disability</option>
+                            <option value="partial">Permanent partial disability</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="disabilityPercentage" style="display: none;">
+                        <label>Disability Percentage:</label>
+                        <input type="number" id="disabilityPercent" min="0" max="100">
+                    </div>
+                </div>
+
+                <!-- Medical Leave Fields -->
+                <div id="leaveFields" class="fitness-fields">
+                    <h3>Medical Leave Details</h3>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Patient Title:</label>
+                                <select id="patientTitle">
+                                    <option value="">Select Title (Optional)</option>
+                                    <option value="Mr.">Mr.</option>
+                                    <option value="Mrs.">Mrs.</option>
+                                    <option value="Master">Master</option>
+                                    <option value="Miss">Miss</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Medical Condition:</label>
+                                <input type="text" id="medicalCondition" value="Pain in foot">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Treatment From Date:</label>
+                                <input type="date" id="treatmentFromDate" value="2025-01-20">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Treatment To Date:</label>
+                                <input type="date" id="treatmentToDate" value="2025-02-09">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Rest Period (days):</label>
+                                <input type="number" id="restPeriodDays" value="30" min="1">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Rest Period From Date:</label>
+                                <input type="date" id="restPeriodFromDate" value="2025-01-20">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fitness Status:</label>
+                        <select id="fitnessStatus">
+                            <option value="fit">Fit to resume duties/attend school</option>
+                            <option value="unfit">Still not better & requires further treatment</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Resume From Date (if fit):</label>
+                        <input type="date" id="resumeFromDate" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Previous Certificate Date (optional):</label>
+                        <input type="date" id="previousCertDate" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Additional Treatment Days (if unfit):</label>
+                        <input type="number" id="additionalTreatmentDays" value="" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hospital/Clinic Name (optional):</label>
+                        <input type="text" id="leaveHospitalName" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Doctor's Advice:</label>
+                        <textarea id="doctorAdvice" placeholder="e.g., fit to resume duty"></textarea>
+                    </div>
+                </div>
+
+                <!-- Referral Fields -->
+                <div id="referralFields" class="fitness-fields">
+                    <h3>Referral Details</h3>
+                    <div class="form-group">
+                        <label>Referring To:</label>
+                        <input type="text" id="referringTo" value="The Matron">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Patient Details for Referral:</label>
+                        <input type="text" id="referralPatient" value="Vir Mir Chandani / M-19 yrs">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Admission Date:</label>
+                        <input type="date" id="admissionDate" value="2025-06-27">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Procedure/Treatment:</label>
+                        <input type="text" id="procedureTreatment" value="Knee Arthroscopy">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Scheduled Date:</label>
+                        <input type="date" id="scheduledDate" value="2025-06-28">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Additional Notes:</label>
+                        <textarea id="additionalNotes" placeholder="Any additional information for the referral"></textarea>
+                    </div>
+                </div>
+
+                <!-- Invoice Fields -->
+                <div id="invoiceFields" class="invoice-fields">
+                    <h3>Invoice Details</h3>
+                    <div class="form-group">
+                        <label>Diagnosis:</label>
+                        <input type="text" id="diagnosis" value="Forehead lipoma, Paronychia">
+                    </div>
+
+                    <h3>Invoice Items</h3>
+                    <div class="add-item-btn">
+                        <button class="btn btn-success" onclick="addInvoiceItem()">+ Add Item</button>
+                    </div>
+                    <div id="invoiceItems">
+                        <!-- Invoice items will be added here -->
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="generateAndPrint()">💾 Generate & Save PDF</button>
+                    <button class="btn btn-primary" onclick="showPrintSettings()">⚙️ Print Settings Help</button>
+                    <button class="btn btn-secondary" onclick="clearForm()">🗑️ Clear Form</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-actions">
+                    <h3>Document Preview</h3>
+                    <button class="btn btn-success" onclick="printDocument()">🖨️ Print</button>
+                    <button class="btn btn-primary" onclick="updatePreview()">🔄 Refresh</button>
+                </div>
+                
+                <div id="documentPreview" class="certificate-preview">
+                    <!-- Document preview will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-help" onclick="showHelp()">❓</div>
+
+    <script>
+        let invoiceItemCounter = 0;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing application...');
+            updatePreview();
+            
+            // Add initial invoice item
+            addInvoiceItem();
+            
+            // Add event listeners for real-time updates
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', updatePreview);
+                input.addEventListener('change', updatePreview);
+            });
+
+            // Template selector
+            const templateOptions = document.querySelectorAll('.template-option');
+            templateOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    templateOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show/hide fields based on template
+                    const templateType = this.dataset.template;
+                    const fitnessFields = document.getElementById('fitnessFields');
+                    const invoiceFields = document.getElementById('invoiceFields');
+                    const referralFields = document.getElementById('referralFields');
+                    const leaveFields = document.getElementById('leaveFields');
+                    
+                    // Hide all conditional fields first
+                    fitnessFields.classList.remove('active');
+                    invoiceFields.classList.remove('active');
+                    referralFields.classList.remove('active');
+                    leaveFields.classList.remove('active');
+                    
+                    // Show appropriate fields
+                    if (templateType === 'fitness' || templateType === 'medical') {
+                        fitnessFields.classList.add('active');
+                    } else if (templateType === 'invoice') {
+                        invoiceFields.classList.add('active');
+                    } else if (templateType === 'referral') {
+                        referralFields.classList.add('active');
+                    } else if (templateType === 'leave') {
+                        leaveFields.classList.add('active');
+                    }
+                    
+                    updatePreview();
+                });
+            });
+
+            // Disability status change
+            document.getElementById('disabilityStatus').addEventListener('change', function() {
+                const percentageDiv = document.getElementById('disabilityPercentage');
+                if (this.value === 'partial') {
+                    percentageDiv.style.display = 'block';
+                } else {
+                    percentageDiv.style.display = 'none';
+                }
+                updatePreview();
+            });
+        });
+
+        function addInvoiceItem() {
+            invoiceItemCounter++;
+            const itemsContainer = document.getElementById('invoiceItems');
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'invoice-item';
+            itemDiv.id = `invoiceItem${invoiceItemCounter}`;
+            
+            itemDiv.innerHTML = `
+                <h4>Item ${invoiceItemCounter}</h4>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Date:</label>
+                            <input type="date" class="item-date" value="2025-07-05" onchange="updatePreview()">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Amount:</label>
+                            <input type="number" class="item-amount" value="1500" min="0" step="1" onchange="updatePreview()">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Procedure/Consultation:</label>
+                    <input type="text" class="item-procedure" value="Primary consultation" onchange="updatePreview()">
+                </div>
+                <div class="item-actions">
+                    <button class="btn btn-danger" onclick="removeInvoiceItem(${invoiceItemCounter})">Remove Item</button>
+                </div>
+            `;
+            
+            itemsContainer.appendChild(itemDiv);
+            updatePreview();
+        }
+
+        function removeInvoiceItem(itemId) {
+            const item = document.getElementById(`invoiceItem${itemId}`);
+            if (item) {
+                item.remove();
+                updatePreview();
+            }
+        }
+
+        function updatePreview() {
+            console.log('Updating preview...');
+            const preview = document.getElementById('documentPreview');
+            if (!preview) {
+                console.error('Document preview element not found!');
+                return;
+            }
+
+            const activeTemplate = document.querySelector('.template-option.active');
+            if (!activeTemplate) {
+                console.error('No active template found!');
+                return;
+            }
+
+            const templateType = activeTemplate.dataset.template;
+            console.log('Template type:', templateType);
+            
+            // Get form values with fallbacks
+            const data = {
+                doctorName: document.getElementById('doctorName')?.value || 'Dr. Sutej Sunil Bachawat',
+                qualifications: document.getElementById('qualifications')?.value || 'MBBS, D.Ortho, DNB (Ortho)',
+                regNumber: document.getElementById('regNumber')?.value || '2016/07/1849',
+                contactNumber: document.getElementById('contactNumber')?.value || '+91 93249 21343',
+                emailId: document.getElementById('emailId')?.value || 'sutejbachawat@gmail.com',
+                documentDate: formatDate(document.getElementById('documentDate')?.value || '2025-07-05'),
+                documentNumber: document.getElementById('documentNumber')?.value || '0001',
+                patientName: document.getElementById('patientName')?.value || 'Mrs. Ranjan Prakashchandra Bhatt',
+                age: document.getElementById('age')?.value || '78',
+                gender: document.getElementById('gender')?.value || 'female',
+                address: document.getElementById('address')?.value || '1101, Vardhaman Galaxy, 28/30, Navi Wadi, Dadiseth Agyari Lane, Chirabazar, Mumbai- 400 002',
+                accidentDescription: document.getElementById('accidentDescription')?.value || 'Fall',
+                accidentDate: formatDate(document.getElementById('accidentDate')?.value || '2025-05-06'),
+                injuries: document.getElementById('injuries')?.value || 'Fracture of left ring finger metacarpal head',
+                hospitalName: document.getElementById('hospitalName')?.value || 'Conwest & Manjula S. Badani Jain Hospital',
+                treatmentStartDate: formatDate(document.getElementById('treatmentStartDate')?.value || '2025-05-08'),
+                treatmentEndDate: formatDate(document.getElementById('treatmentEndDate')?.value || '2025-07-04'),
+                treatmentDetails: document.getElementById('treatmentDetails')?.value || 'Plaster cast for left hand\nPhysiotherapy',
+                examinationDate: formatDate(document.getElementById('examinationDate')?.value || '2025-07-05'),
+                disabilityStatus: document.getElementById('disabilityStatus')?.value || 'no',
+                disabilityPercent: document.getElementById('disabilityPercent')?.value || '0',
+                diagnosis: document.getElementById('diagnosis')?.value || 'Forehead lipoma, Paronychia',
+                referringTo: document.getElementById('referringTo')?.value || 'The Matron',
+                referralPatient: document.getElementById('referralPatient')?.value || 'Vir Mir Chandani / M-19 yrs',
+                admissionDate: formatDate(document.getElementById('admissionDate')?.value || '2025-06-27'),
+                procedureTreatment: document.getElementById('procedureTreatment')?.value || 'Knee Arthroscopy',
+                scheduledDate: formatDate(document.getElementById('scheduledDate')?.value || '2025-06-28'),
+                additionalNotes: document.getElementById('additionalNotes')?.value || '',
+                patientTitle: document.getElementById('patientTitle')?.value || '',
+                medicalCondition: document.getElementById('medicalCondition')?.value || 'Pain in foot',
+                treatmentFromDate: formatDate(document.getElementById('treatmentFromDate')?.value || '2025-01-20'),
+                treatmentToDate: formatDate(document.getElementById('treatmentToDate')?.value || '2025-02-09'),
+                restPeriodDays: document.getElementById('restPeriodDays')?.value || '30',
+                restPeriodFromDate: formatDate(document.getElementById('restPeriodFromDate')?.value || '2025-01-20'),
+                fitnessStatus: document.getElementById('fitnessStatus')?.value || 'fit',
+                resumeFromDate: formatDate(document.getElementById('resumeFromDate')?.value || ''),
+                previousCertDate: formatDate(document.getElementById('previousCertDate')?.value || ''),
+                additionalTreatmentDays: document.getElementById('additionalTreatmentDays')?.value || '',
+                doctorAdvice: document.getElementById('doctorAdvice')?.value || '',
+                leaveHospitalName: document.getElementById('leaveHospitalName')?.value || ''
+            };
+
+            // Get invoice items
+            if (templateType === 'invoice') {
+                data.invoiceItems = getInvoiceItems();
+            }
+
+            console.log('Form data:', data);
+
+            let documentHTML = '';
+            if (templateType === 'fitness') {
+                documentHTML = generateFitnessCertificate(data);
+            } else if (templateType === 'medical') {
+                documentHTML = generateMedicalCertificate(data);
+            } else if (templateType === 'mentalfitness') {
+                documentHTML = generateMentalFitnessCertificate(data);
+            } else if (templateType === 'invoice') {
+                documentHTML = generateInvoice(data);
+            } else if (templateType === 'referral') {
+                documentHTML = generateReferralLetter(data);
+            } else if (templateType === 'leave') {
+                documentHTML = generateMedicalLeaveCertificate(data);
+            }
+
+            preview.innerHTML = documentHTML;
+            console.log('Document HTML generated and inserted');
+        }
+
+        function getInvoiceItems() {
+            const items = [];
+            const itemDivs = document.querySelectorAll('.invoice-item');
+            
+            itemDivs.forEach(itemDiv => {
+                const date = itemDiv.querySelector('.item-date')?.value || '';
+                const procedure = itemDiv.querySelector('.item-procedure')?.value || '';
+                const amount = itemDiv.querySelector('.item-amount')?.value || '0';
+                
+                items.push({
+                    date: formatDate(date),
+                    procedure: procedure,
+                    amount: parseFloat(amount) || 0
+                });
+            });
+            
+            return items;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB');
+        }
+
+        function getPronouns(gender) {
+            if (gender === 'male') {
+                return {
+                    subject: 'He',
+                    object: 'him',
+                    possessive: 'his'
+                };
+            } else {
+                return {
+                    subject: 'She',
+                    object: 'her',
+                    possessive: 'her'
+                };
+            }
+        }
+
+        function generateMedicalLeaveCertificate(data) {
+            let contentSections = [];
+            
+            // Basic patient information - combine title and name in one line
+            const patientTitle = data.patientTitle ? `${data.patientTitle} ` : '';
+            contentSections.push(`<p>This is to Certify that ${patientTitle}<span class="highlight">${data.patientName}</span> is/was having <span class="highlight">${data.medicalCondition}</span> and is/was under my treatment from <span class="highlight">${data.treatmentFromDate}</span> to <span class="highlight">${data.treatmentToDate}</span> (both days inclusive)</p>`);
+            
+            // Medical condition details - only include "at hospital" if hospital name exists
+            const hospitalText = data.leaveHospitalName ? ` at <span class="highlight">${data.leaveHospitalName}</span>` : '';
+            contentSections.push(`<p>Patient is/was suffering from/operated for <span class="highlight">${data.medicalCondition}</span>${hospitalText}</p>`);
+            
+            // Rest period advice
+            contentSections.push(`<p>This patient is advised complete rest & treatment for about <span class="highlight">${data.restPeriodDays}</span> days from <span class="highlight">${data.restPeriodFromDate}</span></p>`);
+            
+            // Fitness status section - only if patient is fit and resume date is provided
+            if (data.fitnessStatus === 'fit' && data.resumeFromDate) {
+                contentSections.push(`<p>This patient is/was better & is/was in fit state of health to resume duties/attend school from <span class="highlight">${data.resumeFromDate}</span></p>`);
+            }
+            
+            // Previous certificate section - only if date is provided
+            if (data.previousCertDate) {
+                contentSections.push(`<p>In continuation of our previous Certificate, dated <span class="highlight">${data.previousCertDate}</span></p>`);
+            }
+            
+            // Additional treatment section - only if patient is unfit
+            if (data.fitnessStatus === 'unfit') {
+                const unfitPatientTitle = data.patientTitle ? `${data.patientTitle} ` : 'Shri/Smt./Master/Miss ';
+                const additionalDays = data.additionalTreatmentDays || '_____';
+                const advice = data.doctorAdvice || '_____________________';
+                
+                contentSections.push(`<p>It is certified that ${unfitPatientTitle}<span class="highlight">${data.patientName}</span> is still not better & requires complete rest & further treatment for about <span class="highlight">${additionalDays}</span> days from to day. He/She is advised <span class="highlight">${advice}</span></p>`);
+            }
+            
+            return `
+                <div class="cert-letterhead">
+                    <div class="letterhead-left">
+                        <div class="contact-details">
+                            <div><strong>Contact No.</strong> ${data.contactNumber}</div>
+                            <div><strong>Reg No.</strong> ${data.regNumber}</div>
+                            <div><strong>Email id :</strong> ${data.emailId}</div>
+                        </div>
+                    </div>
+                    <div class="letterhead-center">
+                        <div class="doctor-name-header">${data.doctorName.toUpperCase()}</div>
+                        <div class="qualifications-header">${data.qualifications}</div>
+                    </div>
+                    <div class="letterhead-right">
+                        <div class="medical-symbol">⚕</div>
+                    </div>
+                </div>
+
+                <div class="certificate-title" style="font-size: 18px; margin: 30px 0 20px 0;">TO WHOMSOEVER IT MAY CONCERN</div>
+
+                <div class="cert-content" style="line-height: 1.8; font-size: 14px;">
+                    ${contentSections.join('')}
+                </div>
+
+                <div class="signature-section" style="margin-top: 80px;">
+                    <div class="signature-right" style="text-align: right;">
+                        <div style="border-top: 2px solid #333; width: 200px; margin-left: auto; margin-bottom: 10px;"></div>
+                        <div style="font-weight: bold; font-size: 16px;">${data.doctorName.toUpperCase()}</div>
+                        <div style="font-size: 12px; color: #666; margin-top: 5px;">Reg. No: ${data.regNumber}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateReferralLetter(data) {
+            return `
+                <div class="cert-letterhead">
+                    <div class="letterhead-left">
+                        <div class="contact-details">
+                            <div><strong>Contact No.</strong> ${data.contactNumber}</div>
+                            <div><strong>Reg No.</strong> ${data.regNumber}</div>
+                            <div><strong>Email id :</strong> ${data.emailId}</div>
+                        </div>
+                    </div>
+                    <div class="letterhead-center">
+                        <div class="doctor-name-header">${data.doctorName.toUpperCase()}</div>
+                        <div class="qualifications-header">${data.qualifications}</div>
+                    </div>
+                    <div class="letterhead-right">
+                        <div class="medical-symbol">⚕</div>
+                    </div>
+                </div>
+
+                <div style="text-align: right; margin-bottom: 40px;">
+                    <div style="font-size: 16px; font-weight: bold;">Date: ${data.documentDate}</div>
+                </div>
+
+                <div style="margin-bottom: 40px;">
+                    <div style="font-size: 16px;">To,</div>
+                    <div style="font-size: 16px; font-weight: bold;">${data.referringTo}.</div>
+                </div>
+
+                <div style="margin-bottom: 30px; line-height: 1.8;">
+                    <p style="font-size: 16px; margin-bottom: 20px;">
+                        Referring <span class="highlight">${data.referralPatient}</span> for favour of admission on <span class="highlight">${data.admissionDate}</span> for <span class="highlight">${data.procedureTreatment}</span> on <span class="highlight">${data.scheduledDate}</span>${data.additionalNotes ? ` in ${data.additionalNotes}` : ''}.
+                    </p>
+                </div>
+
+                <div style="margin-top: 120px;">
+                    <div style="text-align: right;">
+                        <div style="border-top: 2px solid #333; width: 200px; margin-left: auto; margin-bottom: 10px;"></div>
+                        <div style="font-weight: bold; font-size: 16px;">${data.doctorName.toUpperCase()}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateInvoice(data) {
+            const total = data.invoiceItems.reduce((sum, item) => sum + item.amount, 0);
+            
+            let tableRows = '';
+            let serialNumber = 1;
+            
+            data.invoiceItems.forEach(item => {
+                tableRows += `
+                    <tr>
+                        <td style="text-align: center;">${serialNumber}.</td>
+                        <td style="text-align: center;">${item.date}</td>
+                        <td>${item.procedure}</td>
+                        <td class="amount-col">${item.amount}/-</td>
+                    </tr>
+                `;
+                serialNumber++;
+            });
+            
+            return `
+                <div class="cert-letterhead">
+                    <div class="letterhead-left">
+                        <div class="contact-details">
+                            <div><strong>Contact No.</strong> ${data.contactNumber}</div>
+                            <div><strong>Reg No.</strong> ${data.regNumber}</div>
+                            <div><strong>Email id :</strong> ${data.emailId}</div>
+                        </div>
+                    </div>
+                    <div class="letterhead-center">
+                        <div class="doctor-name-header">${data.doctorName.toUpperCase()}</div>
+                        <div class="qualifications-header">${data.qualifications}</div>
+                    </div>
+                    <div class="letterhead-right">
+                        <div class="medical-symbol">⚕</div>
+                    </div>
+                </div>
+
+                <div class="patient-details">
+                    <div class="patient-name"><strong>Patient Name:</strong> ${data.patientName}</div>
+                    <div class="patient-diagnosis"><strong>Diagnosis:</strong> ${data.diagnosis}</div>
+                </div>
+
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Sr. No.</th>
+                            <th style="width: 20%;">Date</th>
+                            <th style="width: 50%;">Procedure/Consultation</th>
+                            <th style="width: 20%;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                        <tr class="total-row">
+                            <td colspan="3" style="text-align: center;"><strong>Total</strong></td>
+                            <td class="amount-col"><strong>${total}/-</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="signature-section" style="margin-top: 180px; min-height: 150px;">
+                    <div style="text-align: center;">
+                        <div style="border-top: 2px solid #333; width: 200px; margin: 0 auto 30px auto;"></div>
+                        <div style="font-weight: bold; font-size: 16px;">${data.doctorName}</div>
+                        <div style="font-size: 12px; color: #666; margin-top: 5px;">Doctor's Signature</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateFitnessCertificate(data) {
+            const treatmentList = data.treatmentDetails.split('\n').filter(item => item.trim()).map(item => `<li>${item.trim()}</li>`).join('');
+            
+            const disabilityText = data.disabilityStatus === 'partial' ? 
+                `a permanent partial disability of ${data.disabilityPercent}%` : 
+                'no residual disability';
+
+            return `
+                <div class="cert-letterhead">
+                    <div class="letterhead-left">
+                        <div class="contact-details">
+                            <div><strong>Contact No.</strong> ${data.contactNumber}</div>
+                            <div><strong>Reg No.</strong> ${data.regNumber}</div>
+                            <div><strong>Email id :</strong> ${data.emailId}</div>
+                        </div>
+                    </div>
+                    <div class="letterhead-center">
+                        <div class="doctor-name-header">${data.doctorName.toUpperCase()}</div>
+                        <div class="qualifications-header">${data.qualifications}</div>
+                    </div>
+                    <div class="letterhead-right">
+                        <div class="medical-symbol">⚕</div>
+                    </div>
+                </div>
+
+                <div class="certificate-title">FITNESS CERTIFICATE</div>
+
+                <div class="certificate-details">
+                    <div><span>Date:</span> ${data.documentDate}</div>
+                    <div><span>Certificate No.:</span> ${data.documentNumber}</div>
+                </div>
+
+                <div class="cert-content">
+                    <p>This is to certify that <span class="highlight">${data.patientName}</span>, aged <span class="highlight">${data.age}</span> years, residing at <span class="highlight">${data.address}</span>, was under my treatment for injuries sustained due to a <span class="highlight">${data.accidentDescription}</span> that occurred on <span class="highlight">${data.accidentDate}</span>.</p>
+
+                    <p>The patient was diagnosed with <span class="highlight">${data.injuries}</span>.</p>
+
+                    <p>Treatment was provided at <span class="highlight">${data.hospitalName}</span> from <span class="highlight">${data.treatmentStartDate}</span> to <span class="highlight">${data.treatmentEndDate}</span>. The patient underwent necessary medical management, which included:</p>
+
+                    <ul>${treatmentList}</ul>
+
+                    <p>On examination conducted on <span class="highlight">${data.examinationDate}</span>, I find that the above-named patient has recovered satisfactorily from the sustained injuries and is now <span class="highlight">medically fit</span> to resume normal activities.</p>
+
+                    <p>There is <span class="highlight">${disabilityText}</span>.</p>
+
+                    <p>This certificate is issued for the purpose of claiming <span class="highlight">Personal Accident Insurance</span> and bears no responsibility for legal use outside of this stated purpose.</p>
+                </div>
+
+                <div class="signature-section">
+                    <div class="signature-left">
+                        <div class="signature-line"></div>
+                        <div class="signature-text">${data.doctorName}</div>
+                        <div class="signature-info">Doctor's Signature</div>
+                    </div>
+                    <div class="signature-right">
+                        <div class="signature-text"><strong>Reg No.</strong> ${data.regNumber}</div>
+                        <div class="signature-info"><strong>Date:</strong> ${data.documentDate}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateMedicalCertificate(data) {
+            const treatmentList = data.treatmentDetails.split('\n').filter(item => item.trim()).map(item => `<li>${item.trim()}</li>`).join('');
+            
+            return `
+                <div class="cert-letterhead">
+                    <div class="letterhead-left">
+                        <div class="contact-details">
+                            <div><strong>Contact No.</strong> ${data.contactNumber}</div>
+                            <div><strong>Reg No.</strong> ${data.regNumber}</div>
+                            <div><strong>Email id :</strong> ${data.emailId}</div>
+                        </div>
+                    </div>
+                    <div class="letterhead-center">
+                        <div class="doctor-name-header">${data.doctorName.toUpperCase()}</div>
+                        <div class="qualifications-header">${data.qualifications}</div>
+                    </div>
+                    <div class="letterhead-right">
+                        <div class="medical-symbol">⚕</div>
+                    </div>
+                </div>
+
+                <div class="certificate-title">MEDICAL CERTIFICATE</div>
+
+                <div class="certificate-details">
+                    <div><span>Date:</span> ${data.documentDate}</div>
+                    <div><span>Certificate No.:</span> ${data.documentNumber}</div>
+                </div>
+
+                <div class="cert-content">
+                    <p>This is to certify that <span class="highlight">${data.patientName}</span>, aged <span class="highlight">${data.age}</span> years, residing at <span class="highlight">${data.address}</span>, was under my medical care.</p>
+
+                    <p>The patient was diagnosed with <span class="highlight">${data.injuries}</span>.</p>
+
+                    <p>Treatment was provided at <span class="highlight">${data.hospitalName}</span> from <span class="highlight">${data.treatmentStartDate}</span> to <span class="highlight">${data.treatmentEndDate}</span>. The medical management included:</p>
+
+                    <ul>${treatmentList}</ul>
+
+                    <p>On examination conducted on <span class="highlight">${data.examinationDate}</span>, the patient's condition has been evaluated and appropriate medical recommendations have been provided.</p>
+
+                    <p>This certificate is issued for medical purposes as requested by the patient.</p>
+                </div>
+
+                <div class="signature-section">
+                    <div class="signature-left">
+                        <div class="signature-line"></div>
+                        <div class="signature-text">${data.doctorName}</div>
+                        <div class="signature-info">Doctor's Signature</div>
+                    </div>
+                    <div class="signature-right">
+                        <div class="signature-text"><strong>Reg No.</strong> ${data.regNumber}</div>
+                        <div class="signature-info"><strong>Date:</strong> ${data.documentDate}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateMentalFitnessCertificate(data) {
+            const pronouns = getPronouns(data.gender);
+            
+            return `
+                <div class="cert-letterhead">
+                    <div class="letterhead-left">
+                        <div class="contact-details">
+                            <div><strong>Contact No.</strong> ${data.contactNumber}</div>
+                            <div><strong>Reg No.</strong> ${data.regNumber}</div>
+                            <div><strong>Email id :</strong> ${data.emailId}</div>
+                        </div>
+                    </div>
+                    <div class="letterhead-center">
+                        <div class="doctor-name-header">${data.doctorName.toUpperCase()}</div>
+                        <div class="qualifications-header">${data.qualifications}</div>
+                    </div>
+                    <div class="letterhead-right">
+                        <div class="medical-symbol">⚕</div>
+                    </div>
+                </div>
+
+                <div class="certificate-title">MEDICAL FITNESS CERTIFICATE</div>
+
+                <div class="cert-content">
+                    <p>I <span class="highlight">${data.doctorName}</span>, do hereby certify that I have personally examined <span class="highlight">${data.patientName}</span>, who is aged about <span class="highlight">${data.age}</span> years and is residing at <span class="highlight">${data.address}</span>. Based on my examination, I hereby confirm and certify as under:</p>
+
+                    <ol style="padding-left: 40px; margin: 25px 0;">
+                        <li><span class="highlight">${data.patientName}</span> has clarity of thought and clear communication, both verbal and emotional.</li>
+                        <li>${pronouns.subject} is fully capable of reading, comprehending, and signing ${pronouns.possessive} Will with complete understanding.</li>
+                        <li>${pronouns.subject} is mentally and emotionally fit to execute ${pronouns.possessive} Will.</li>
+                    </ol>
+                </div>
+
+                <div class="signature-section">
+                    <div class="signature-left">
+                        <div class="signature-line"></div>
+                        <div class="signature-text">${data.doctorName}</div>
+                        <div class="signature-info">Doctor's Signature</div>
+                    </div>
+                    <div class="signature-right">
+                        <div class="signature-text"><strong>Reg No.</strong> ${data.regNumber}</div>
+                        <div class="signature-info"><strong>Date:</strong> ${data.documentDate}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function printDocument() {
+            console.log('Print button clicked');
+            updatePreview();
+            setTimeout(() => {
+                window.print();
+            }, 200);
+        }
+
+        function generateAndPrint() {
+            console.log('Generate and Print button clicked');
+            updatePreview();
+            setTimeout(() => {
+                window.print();
+            }, 300);
+        }
+
+        function showPrintSettings() {
+            alert(`📋 MEDICAL CERTIFICATE & INVOICE GENERATOR - VERSION 87.0:
+
+🔧 PRINT SETTINGS:
+✅ Destination: "Save as PDF"
+✅ Paper size: A4
+✅ Layout: Portrait
+✅ Margins: DEFAULT (no need to change)
+✅ Scale: 100%
+✅ Headers/footers: OFF
+✅ Background graphics: OFF
+
+✨ VERSION 87.0 - FURTHER GRAMMAR IMPROVEMENTS:
+• Fixed "and is/was under my treatment" construction
+• Made hospital name optional in medical condition line
+• Added hospital name field for leave certificate
+
+🎯 ALL TEMPLATES:
+• Fitness Certificate: Insurance claims
+• Medical Certificate: General medical use
+• Mental Fitness Certificate: Legal capacity assessment (with gender-specific pronouns)
+• Medical Invoice: Professional billing with multiple items
+• Referral Letter: Hospital admission referrals
+• Medical Leave Certificate: To whomsoever it may concern
+
+📐 BUILT-IN MARGINS:
+• Content padding ensures proper spacing
+• Never touches page edges
+• Professional appearance guaranteed
+
+🖨️ PRINTING STEPS:
+1. Select desired template
+2. Fill in required information
+3. For invoices: Add multiple items as needed
+4. Click "Generate & Save PDF"
+5. Keep all print settings as default
+6. Save your professional document
+
+Version 87.0 now includes further grammar improvements and optional hospital field!`);
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all form data?')) {
+                document.querySelectorAll('input, select, textarea').forEach(input => {
+                    if (input.type === 'checkbox') {
+                        input.checked = false;
+                    } else if (input.type === 'date') {
+                        input.value = '';
+                    } else if (input.type === 'number') {
+                        input.value = '';
+                    } else {
+                        input.value = '';
+                    }
+                });
+                
+                document.querySelectorAll('.template-option').forEach(opt => opt.classList.remove('active'));
+                document.querySelector('.template-option[data-template="fitness"]').classList.add('active');
+                document.getElementById('disabilityPercentage').style.display = 'none';
+                document.getElementById('fitnessFields').classList.add('active');
+                document.getElementById('invoiceFields').classList.remove('active');
+                document.getElementById('referralFields').classList.remove('active');
+                document.getElementById('leaveFields').classList.remove('active');
+                
+                // Clear invoice items
+                document.getElementById('invoiceItems').innerHTML = '';
+                invoiceItemCounter = 0;
+                
+                updatePreview();
+            }
+        }
+
+        function showHelp() {
+            alert(`🏥 MEDICAL CERTIFICATE & INVOICE GENERATOR - VERSION 87.0
+
+📋 FURTHER GRAMMAR IMPROVEMENTS:
+• Fixed "and is/was under my treatment" construction
+• Made hospital name optional in leave certificate
+• Improved conditional content rendering
+
+🎯 ALL DOCUMENT TYPES:
+• Fitness Certificate: Insurance claims and fitness declarations
+• Medical Certificate: General medical documentation
+• Mental Fitness Certificate: Legal capacity assessment with proper pronouns
+• Medical Invoice: Professional billing with multiple items
+• Referral Letter: Hospital admission referrals
+• Medical Leave Certificate: To whomsoever it may concern
+
+📐 SMART FEATURES:
+• Template-specific form fields
+• Live preview functionality
+• Built-in margins for professional appearance
+• Single-page optimization
+• Gender-aware pronoun usage
+
+🖊️ PROFESSIONAL FORMATTING:
+• Medical-grade typography and spacing
+• Proper signature areas with adequate space
+• Clean, legal-compliant document structure
+• Professional invoice table formatting
+
+VERSION 87.0 - Now with further grammar improvements and optional hospital field!`);
+        }
+    </script>
+</body>
+</html>
